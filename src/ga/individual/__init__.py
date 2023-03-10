@@ -49,8 +49,8 @@ class Individual(object):
     def __add__(self, other):
         return self.__class__.mate(self, other)
     
-    @classmethod
-    def mutate(cls, x):
+    @staticmethod
+    def mutate(x):
         index = random.randint(0, len(x.get_chromosome()) - 1)
         x.get_chromosome()[index] = 1 - x.get_chromosome()[index]
         return x
@@ -59,11 +59,6 @@ class Individual(object):
 class KnapsackIndividual(Individual):
     def __init__(self, chromosome: list = None):
         super().__init__(chromosome)
-
-    @classmethod
-    def random_population(cls, size: int, genes):
-        """Create a random population of individuals."""
-        return [cls([random.choice([0, 1]) for _ in range(len(genes))]) for _ in range(size)]
 
     def __add__(self, other):
         return self.__class__.mate(self, other)
@@ -76,7 +71,10 @@ class KnapsackIndividual(Individual):
 
     def weight(self, items):
         return sum([x[0] for x in self.render_items(items)])
+    
+    def get_chosen(self, items):
+        return [j[0] for i, j in zip(self.get_chromosome(), items) if i == 1]
 
     def render(self, items) -> str:
-        d = {'Weight': self.weight(items), 'Value': self.fitness(items)}
+        d = {'Chosen': self.get_chosen(items), 'Weight': self.weight(items), 'Value': self.fitness(items)}
         return f"{d}"

@@ -18,6 +18,6 @@ if __name__ == '__main__':
         mutate=lambda x: KnapsackIndividual.mutate(x),
         select=lambda x: x[:int(len(x)*0.05)]
     )
-    population = KnapsackIndividual.random_population(20, ga.items)
-    res = ga.run(population, 200, debug=True)
+    population = KnapsackIndividual.random_population(20, len(ga.items), [0, 1])
+    res = ga.run(population, 200, verbose=True)
     print(f"Answer: {res[0].render(ga.items)}")

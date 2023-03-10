@@ -9,6 +9,10 @@ GeneticAlgorithm = GeneticAlgorithm
 
 
 class KnapsackGeneticAlgorithm(GeneticAlgorithm):
+    """Knapsack Genetic Algorithm class."""
+    items: list[tuple[int, int]] = None
+    max_weight: int = None
+    
     def __init__(self, **kwargs):
         super().__init__(**kwargs)
         self.items = kwargs.get('items')
@@ -33,14 +37,14 @@ class KnapsackGeneticAlgorithm(GeneticAlgorithm):
         if self.max_weight <= 0:
             raise ValueError('max_weight must be non-negative')
 
-    def run(self, population: list[Individual], generations, debug: bool = False):
+    def run(self, population: list[Individual], generations, verbose: bool = False):
         self.guard_self()
         pool = population
         """Run the Genetic Algorithm."""
         for gen_i in range(1, generations + 1):
             pool = sorted(pool, key=lambda x: self.fitness(x), reverse=True)
             best_individual = pool[0]
-            if debug:
+            if verbose:
                 print(self._log_msg(gen_i, best_individual, self.fitness(best_individual), len(pool)))
             pool = self._new_pool(pool)
         return sorted(pool, key=lambda x: self.fitness(x), reverse=True)
